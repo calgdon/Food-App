@@ -11,7 +11,7 @@ function AvailableMeals() {
       const response = await fetch(
         "https://food-app-64e28-default-rtdb.europe-west1.firebasedatabase.app/meals.json"
       );
-      const responseData = response.json();
+      const responseData = await response.json();
 
       const loadedMeals = [];
 
