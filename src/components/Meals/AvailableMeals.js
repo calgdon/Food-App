@@ -5,14 +5,20 @@ import MealItem from "./MealItem/MealItem";
 
 function AvailableMeals() {
   const [meals, setMeals] = useState([]);
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     const fetchMeals = async () => {
       const response = await fetch(
         "https://food-app-64e28-default-rtdb.europe-west1.firebasedatabase.app/meals.json"
       );
-      const responseData = await response.json();
 
+      if (!response.ok){
+        throw new Error("Something went wrong!")
+      }
+
+      const responseData = await response.json();
       const loadedMeals = [];
 
       for (const key in responseData) {
@@ -25,12 +31,31 @@ function AvailableMeals() {
       }
 
       setMeals(loadedMeals);
-    };
-
-    fetchMeals();
+      setIsLoading(false)
+    }; 
+    fetchMeals().catch(error => {
+      setIsLoading(false)
+      setError(error)
+    });
   }, []);
 
-  console.log(meals)
+  if (isLoading){
+    return (
+    <section className={classes.MealsLoading}>
+    <p>Loading...</p>
+    </section>
+    )
+  }
+
+  if (error){
+    return(
+      <section className={classes.MealsError}>
+        <p>{error}</p>
+      </section>
+
+    )
+  }
+
 
   const mealsList = meals.map((meal) => (
     <MealItem
@@ -41,6 +66,8 @@ function AvailableMeals() {
       price={meal.price}
     />
   ));
+
+  
 
   return (
     <section className={classes.meals}>
