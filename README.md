@@ -1,4 +1,4 @@
-# Callum's Meals
+# Food Ordering App 
 
 A simple food ordering application that cements the fundamentals of useReducer, useState, useContext and the Fetch API to send and receive data from a  FireBase database. 
 
